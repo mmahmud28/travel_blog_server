@@ -2,7 +2,7 @@ const dns = require("node:dns");
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion,  ObjectId } = require('mongodb');
 const app = express();
 const port = 5000 || process.env.PORT;
 const dotenv = require('dotenv');
@@ -56,11 +56,17 @@ async function run() {
     app.post('/destinations', async (req, res) => {
       const destination = req.body;
       console.log(destination);
-
       const result = await collection.insertOne(destination);
       res.send(result);
     })
 
+
+    app.get('/destinations/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const destination = await collection.findOne(query);
+      res.send(destination);
+    });
 
 
 
