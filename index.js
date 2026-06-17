@@ -55,7 +55,6 @@ async function run() {
 
     app.post('/destinations', async (req, res) => {
       const destination = req.body;
-      console.log(destination);
       const result = await collection.insertOne(destination);
       res.send(result);
     })
@@ -68,6 +67,23 @@ async function run() {
       res.send(destination);
     });
 
+
+    app.patch("/destinations/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedData = req.body;     
+      
+      const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedData }
+      );
+      res.send(result);
+    });
+
+    app.delete("/destinations/:id", async (req, res) => {
+      const {id} = req.params;
+      const result = await collection.deleteOne({_id: new ObjectId (id)});
+      res.send(result)
+    })
 
 
 
